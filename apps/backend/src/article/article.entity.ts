@@ -48,6 +48,7 @@ export class Article {
 
   @Property({ type: 'number' })
   favoritesCount = 0;
+  favorites: any;
 
   constructor(author: User, title: string, description: string, body: string) {
     this.author = author;

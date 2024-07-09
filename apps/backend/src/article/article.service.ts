@@ -8,6 +8,7 @@ import { Article } from './article.entity';
 import { IArticleRO, IArticlesRO, ICommentsRO } from './article.interface';
 import { Comment } from './comment.entity';
 import { CreateArticleDto, CreateCommentDto } from './dto';
+import { RosterDto } from './dto/roster.dto';
 
 @Injectable()
 export class ArticleService {
@@ -175,5 +176,23 @@ export class ArticleService {
 
   async delete(slug: string) {
     return this.articleRepository.nativeDelete({ slug });
+  }
+
+  async getRoster(): Promise<RosterDto[]> {
+    const users = await this.userRepository.findAll({ populate: ['articles', 'articles.favoritesCount'] });
+
+    return users.map(user => {
+      const articlesArray = user.articles.getItems(); // Convert Collection to array
+      const totalArticles = articlesArray.length;
+      const totalFavorites = articlesArray.reduce((sum, article) => sum + article.favorites.length, 0);
+      const firstArticleDate = totalArticles > 0 ? articlesArray[0].createdAt : null;
+
+      return {
+        username: user.username,
+        totalArticles,
+        totalFavorites,
+        firstArticleDate,
+      };
+    });
   }
 }
