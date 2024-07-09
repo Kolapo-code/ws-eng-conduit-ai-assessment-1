@@ -4,6 +4,7 @@ import { User } from '../user/user.decorator';
 import { IArticleRO, IArticlesRO, ICommentsRO } from './article.interface';
 import { ArticleService } from './article.service';
 import { CreateArticleDto, CreateCommentDto } from './dto';
+import { RosterDto } from './dto/roster.dto';
 
 @ApiBearerAuth()
 @ApiTags('articles')
@@ -25,6 +26,11 @@ export class ArticleController {
   async getFeed(@User('id') userId: number, @Query() query: Record<string, string>): Promise<IArticlesRO> {
     return this.articleService.findFeed(+userId, query);
   }
+
+  @Get('roster')
+  async getRoster(): Promise<RosterDto[]> {
+    return this.articleService.getRoster();
+  }  
 
   @Get(':slug')
   async findOne(@User('id') userId: number, @Param('slug') slug: string): Promise<IArticleRO> {

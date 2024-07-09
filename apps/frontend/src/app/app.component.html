@@ -1,3 +1,29 @@
 <cdt-navbar [isLoggedIn]="isLoggedIn$ | async" [user]="user$ | async"></cdt-navbar>
+
+<!-- Add your article creation form here -->
+<form [formGroup]="articleForm" (ngSubmit)="createArticle()" *ngIf="isLoggedIn$ | async">
+  <div>
+    <label for="title">Article Title</label>
+    <input id="title" formControlName="title" type="text" placeholder="Article Title" required>
+  </div>
+  
+  <div>
+    <label for="description">Description</label>
+    <input id="description" formControlName="description" type="text" placeholder="What's this article about?" required>
+  </div>
+  
+  <div>
+    <label for="body">Body</label>
+    <textarea id="body" formControlName="body" placeholder="Write your article (in markdown)" required></textarea>
+  </div>
+  
+  <div>
+    <label for="tags">Tags</label>
+    <input id="tags" formControlName="tags" type="text" placeholder="Enter tags (comma-separated)">
+  </div>
+  
+  <button type="submit" [disabled]="!articleForm.valid">Publish Article</button>
+</form>
+
 <router-outlet></router-outlet>
 <cdt-footer></cdt-footer>
